@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Skill Share - Manipal Jaipur</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .header p {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        .category {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .category img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        .category:hover {
+            transform: scale(1.05);
+            background-color: #3498db;
+            color: white;
+        }
+        .skills-list {
+            margin-top: 20px;
+        }
+        .skill-item {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .section-title {
+            color: #2c3e50;
+            margin-top: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="container" id="registrationPage">
+        <div class="header">
+            <h1>Skill Share</h1>
+            <p>Manipal Jaipur</p>
+        </div>
+        <input type="text" placeholder="Full Name" id="fullName" maxlength="50">
+        <input type="tel" placeholder="Phone Number" id="phoneNumber" pattern="[0-9]{10}" maxlength="10">
+        <input type="text" placeholder="Registration Number" id="registrationNumber" maxlength="10">
+        <button onclick="createProfile()">Create Profile</button>
+    </div>
+
+    <div class="container hidden" id="homePage">
+        <div class="header">
+            <h1>Skill Share</h1>
+            <p>Discover Campus Talents</p>
+        </div>
+        <div class="categories">
+            <div class="category" data-category="Sports">
+                <img src="/api/placeholder/80/80?text=Sports" alt="Sports">
+                Sports
+            </div>
+            <div class="category" data-category="Education">
+                <img src="/api/placeholder/80/80?text=Education" alt="Education">
+                Education
+            </div>
+            <div class="category" data-category="Cooking">
+                <img src="/api/placeholder/80/80?text=Cooking" alt="Cooking">
+                Cooking
+            </div>
+            <div class="category" data-category="Music">
+                <img src="/api/placeholder/80/80?text=Music" alt="Music">
+                Music
+            </div>
+            <div class="category" data-category="Art">
+                <img src="/api/placeholder/80/80?text=Art" alt="Art">
+                Art
+            </div>
+            <div class="category" data-category="Technology">
+                <img src="/api/placeholder/80/80?text=Technology" alt="Technology">
+                Technology
+            </div>
+        </div>
+    </div>
+
+    <div class="container hidden" id="skillsPage">
+        <div class="header">
+            <h1 id="categoryTitle"></h1>
+            <button onclick="goBack()">Back to Categories</button>
+        </div>
+        <h2 class="section-title">Featured Skills</h2>
+        <div class="skills-list" id="featuredSkillsList"></div>
+        <h2 class="section-title">All Skills</h2>
+        <div class="skills-list" id="allSkillsList"></div>
+    </div>
+
+    <script>
+        const SKILLS_DATA = {
+            'Sports': {
+                featured: [
+                    { name: 'John Doe', skill: 'Basketball', fee: '500/hr', phone: '9876543210', rating: 4.5 }
+                ],
+                all: [
+                    { name: 'Jane Smith', skill: 'Football', fee: '400/hr', phone: '9988776655', rating: 4.2 },
+                    { name: 'Mike Johnson', skill: 'Cricket Coaching', fee: '450/hr', phone: '7766554433', rating: 4.7 }
+                ]
+            },
+            'Education': {
+                featured: [
+                    { name: 'Sarah Williams', skill: 'Programming', fee: '600/hr', phone: '8899112233', rating: 4.8 }
+                ],
+                all: [
+                    { name: 'Mike Johnson', skill: 'Math Tutoring', fee: '300/hr', phone: '7766554433', rating: 4.3 },
+                    { name: 'Emily Chen', skill: 'Language Lessons', fee: '400/hr', phone: '9911223344', rating: 4.6 }
+                ]
+            },
+            'Cooking': {
+                featured: [
+                    { name: 'Chef Alex', skill: 'Italian Cuisine', fee: '1000/session', phone: '9900112233', rating: 4.6 }
+                ],
+                all: [
+                    { name: 'Maria Rodriguez', skill: 'Baking', fee: '700/session', phone: '8877665544', rating: 4.7 },
+                    { name: 'Tom Anderson', skill: 'Vegetarian Cooking', fee: '500/session', phone: '7755441122', rating: 4.4 }
+                ]
+            },
+            'Music': {
+                featured: [
+                    { name: 'Tom Anderson', skill: 'Guitar Lessons', fee: '500/hr', phone: '7755441122', rating: 4.5 }
+                ],
+                all: [
+                    { name: 'Emily Chen', skill: 'Vocal Training', fee: '600/hr', phone: '9911223344', rating: 4.7 },
+                    { name: 'David Kim', skill: 'Piano Lessons', fee: '550/hr', phone: '8844332211', rating: 4.3 }
+                ]
+            },
+            'Art': {
+                featured: [
+                    { name: 'Lisa Wong', skill: 'Digital Art', fee: '700/hr', phone: '9988776655', rating: 4.6 }
+                ],
+                all: [
+                    { name: 'Mark Rodriguez', skill: 'Painting', fee: '500/hr', phone: '7766554433', rating: 4.4 },
+                    { name: 'Sophie Lee', skill: 'Photography', fee: '600/hr', phone: '8899112233', rating: 4.5 }
+                ]
+            },
+            'Technology': {
+                featured: [
+                    { name: 'Alex Johnson', skill: 'Web Development', fee: '800/hr', phone: '9911223344', rating: 4.7 }
+                ],
+                all: [
+                    { name: 'Emma Smith', skill: 'App Design', fee: '700/hr', phone: '7755441122', rating: 4.5 },
+                    { name: 'Ryan Chen', skill: 'Data Science', fee: '900/hr', phone: '8844332211', rating: 4.6 }
+                ]
+            }
+        };
+
+        function createProfile() {
+            const fullName = document.getElementById('fullName').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const registrationNumber = document.getElementById('registrationNumber').value;
+
+            if (fullName && phoneNumber.length === 10 && registrationNumber.length === 10) {
+                document.getElementById('registrationPage').classList.add('hidden');
+                document.getElementById('homePage').classList.remove('hidden');
+            } else {
+                alert('Please fill all fields correctly');
+            }
+        }
+
+        document.querySelector('.categories').addEventListener('click', function(event) {
+            const categoryEl = event.target.closest('.category');
+            if (categoryEl) {
+                const category = categoryEl.dataset.category;
+                openSkillCategory(category);
+            }
+        });
+
+        function openSkillCategory(category) {
+            const categoryTitle = document.getElementById('categoryTitle');
+            const featuredSkillsList = document.getElementById('featuredSkillsList');
+            const allSkillsList = document.getElementById('allSkillsList');
+            
+            categoryTitle.textContent = category;
+            
+            const categoryData = SKILLS_DATA[category];
+
+            featuredSkillsList.innerHTML = categoryData.featured.map(skill => `
+                <div class="skill-item">
+                    <div>
+                        <strong>${skill.name}</strong> - ${skill.skill}
+                        <br>Fee: ${skill.fee}
+                        <br>Rating: ★ ${skill.rating}/5
+                    </div>
+                    <div>
+                        <button onclick="contactSkillProvider('${skill.name}', '${skill.phone}')">Contact</button>
+                    </div>
+                </div>
+            `).join('');
+
+            allSkillsList.innerHTML = categoryData.all.map(skill => `
+                <div class="skill-item">
+                    <div>
+                        <strong>${skill.name}</strong> - ${skill.skill}
+                        <br>Fee: ${skill.fee}
+                        <br>Rating: ★ ${skill.rating}/5
+                    </div>
+                    <div>
+                        <button onclick="contactSkillProvider('${skill.name}', '${skill.phone}')">Contact</button>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('skillsPage').classList.remove('hidden');
+        }
+
+        function contactSkillProvider(name, phone) {
+            alert(`Contact ${name} at ${phone}`);
+        }
+
+        function goBack() {
+            document.getElementById('skillsPage').classList.add('hidden');
+            document.getElementById('homePage').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
