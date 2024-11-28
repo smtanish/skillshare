@@ -34,7 +34,7 @@
             color: #7f8c8d;
             font-size: 0.9em;
         }
-        input {
+        input, textarea {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -105,7 +105,6 @@
         .hidden { 
             display: none !important; 
         }
-        /* New Profile Edit Styles */
         .edit-profile-form {
             background-color: #f9f9f9;
             border-radius: 10px;
@@ -113,7 +112,8 @@
             margin-top: 20px;
         }
         .edit-profile-form input, 
-        .edit-profile-form select {
+        .edit-profile-form select,
+        .edit-profile-form textarea {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -149,6 +149,12 @@
             padding: 15px;
             border-radius: 8px;
         }
+        .achievements-section {
+            margin-top: 20px;
+            background-color: #f1f8ff;
+            padding: 15px;
+            border-radius: 8px;
+        }
         .edit-profile-buttons {
             display: flex;
             gap: 10px;
@@ -156,9 +162,34 @@
         .edit-profile-buttons button {
             flex: 1;
         }
+        .profile-overview {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .profile-skills, .profile-achievements {
+            background-color: #f0f4f8;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .profile-action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .back-button {
+            background-color: #95a5a6;
+        }
     </style>
 </head>
 <body>
+    <!-- Previous parts of the HTML remain the same -->
     <!-- Registration Page -->
     <div class="container" id="registrationPage">
         <div class="header">
@@ -216,7 +247,7 @@
         <h2 class="section-title">All Skills</h2>
         <div class="skills-list" id="allSkillsList"></div>
     </div>
-
+ 
     <!-- Profile Edit Page -->
     <div class="container hidden" id="profileEditPage">
         <div class="header">
@@ -228,6 +259,9 @@
             <input type="text" id="editFullName" placeholder="Full Name">
             <input type="tel" id="editPhoneNumber" placeholder="Phone Number" maxlength="10">
             <input type="text" id="editRegistrationNumber" placeholder="Registration Number" maxlength="10">
+            
+            <!-- New Personal Description Section -->
+            <textarea id="personalDescription" placeholder="Tell us about yourself (max 300 characters)" maxlength="300" rows="4"></textarea>
             
             <div class="skills-input-container">
                 <select id="skillCategory">
@@ -249,14 +283,55 @@
                 <div id="mySkillsList"></div>
             </div>
             
+            <!-- New Achievements Section -->
+            <div class="achievements-section">
+                <h2>My Achievements</h2>
+                <div id="achievementsList"></div>
+                <div class="skills-input-container">
+                    <input type="text" id="achievementTitle" placeholder="Achievement Title">
+                    <input type="text" id="achievementYear" placeholder="Year" maxlength="4">
+                </div>
+                <button class="add-skill-btn" onclick="addAchievement()">Add Achievement</button>
+            </div>
+            
             <div class="edit-profile-buttons">
                 <button onclick="saveProfile()">Save Profile</button>
                 <button onclick="cancelEdit()">Cancel</button>
             </div>
+
+        </div>
+    </div>
+    <!--Booking Profile page-->
+    <div class="container hidden" id="bookingProfilePage">
+        <div class="profile-overview">
+            <div class="profile-header">
+                <h1 id="profileName"></h1>
+                <p id="profileSkill"></p>
+                <p id="profileFee"></p>
+            </div>
+            
+            <div class="profile-skills">
+                <h2>Skills</h2>
+                <div id="profileSkillsList"></div>
+            </div>
+            
+            <div class="profile-achievements">
+                <h2>Achievements</h2>
+                <div id="profileAchievementsList"></div>
+            </div>
+            
+            <div id="profileDescription"></div>
+            
+            <div class="profile-action-buttons">
+                <button onclick="goBackToSkills()">Back to Skills</button>
+                <button>Book Session</button>
+            </div>
         </div>
     </div>
 
+    <!-- Previous script remains the same, with added functions -->
     <script>
+        // Previous script code remains the same, with these additions:
         const SKILLS_DATA = {
             'Sports': {
                 featured: [
@@ -352,6 +427,8 @@
             document.getElementById('editFullName').value = fullName;
             document.getElementById('editPhoneNumber').value = phoneNumber;
             document.getElementById('editRegistrationNumber').value = registrationNumber;
+            document.getElementById('personalDescription').value = personalDescription;
+            updateAchievementsList();
         }
         
         function addSkill() {
@@ -404,11 +481,10 @@
             const fullName = document.getElementById('editFullName').value;
             const phoneNumber = document.getElementById('editPhoneNumber').value;
             const registrationNumber = document.getElementById('editRegistrationNumber').value;
-        
+            personalDescription = document.getElementById('personalDescription').value;
+
             if (fullName && phoneNumber.length === 10 && registrationNumber.length === 10) {
-                // In a real application, you would save this to a backend
-                alert('Profile saved successfully!');
-                
+                // Previous save logic remains the same
                 // Update SKILLS_DATA with user's skills
                 userSkills.forEach(skill => {
                     if (!SKILLS_DATA[skill.category].all.some(s => s.name === fullName)) {
@@ -420,13 +496,16 @@
                             rating: 4.0
                         });
                     }
-                });
-        
+                }); 
+                // Additional logic to save description and achievements
+                alert('Profile saved successfully!\n\n' + 
+                      'Description: ' + personalDescription + 
+                      '\n\nAchievements: ' + userAchievements.length);
+
                 // Update registration page details
                 document.getElementById('fullName').value = fullName;
                 document.getElementById('phoneNumber').value = phoneNumber;
                 document.getElementById('registrationNumber').value = registrationNumber;
-        
                 // Return to home page
                 document.getElementById('profileEditPage').classList.add('hidden');
                 document.getElementById('homePage').classList.remove('hidden');
@@ -466,7 +545,7 @@
                         <br>Rating: ★ ${skill.rating}/5
                     </div>
                     <div>
-                        <button onclick="contactSkillProvider('${skill.name}', '${skill.phone}')">Contact</button>
+                        <button onclick="openBookingProfile('${skill.name}', '${skill.skill}', '${skill.fee}', '${skill.phone}')">Book</button>
                     </div>
                 </div>
             `).join('');
@@ -479,7 +558,7 @@
                         <br>Rating: ★ ${skill.rating}/5
                     </div>
                     <div>
-                        <button onclick="contactSkillProvider('${skill.name}', '${skill.phone}')">Contact</button>
+                        <button onclick="openBookingProfile('${skill.name}', '${skill.skill}', '${skill.fee}', '${skill.phone}')">Book</button>
                     </div>
                 </div>
             `).join('');
@@ -487,7 +566,58 @@
             document.getElementById('homePage').classList.add('hidden');
             document.getElementById('skillsPage').classList.remove('hidden');
         }
+
+        function openBookingProfile(name, skill, fee, phone) {
+            const profilePage = document.getElementById('bookingProfilePage');
+            const profileName = document.getElementById('profileName');
+            const profileSkill = document.getElementById('profileSkill');
+            const profileFee = document.getElementById('profileFee');
+            const profileSkillsList = document.getElementById('profileSkillsList');
+            const profileAchievementsList = document.getElementById('profileAchievementsList');
+            const profileDescription = document.getElementById('profileDescription');
+
+            // Set basic profile information
+            profileName.textContent = name;
+            profileSkill.textContent = skill;
+            profileFee.textContent = `Fee: ${fee}`;
+
+            // Find user skills
+            const userMatchedSkills = userSkills.filter(s => s.skill === skill);
+            profileSkillsList.innerHTML = userMatchedSkills.map(s => `
+                <div>
+                    <strong>${s.skill}</strong> in ${s.category}
+                    <br>Fee: ${s.fee}
+                    <br>Initial Rating: ★ 4.0/5
+                </div>
+            `).join('');
+
+            // Display achievements
+            profileAchievementsList.innerHTML = userAchievements.map(a => `
+                <div>
+                    <strong>${a.title}</strong>
+                    <br>Year: ${a.year}
+                </div>
+            `).join('');
+
+            // Set personal description
+            profileDescription.innerHTML = `
+                <div class="profile-skills" style="margin-top: 15px;">
+                    <h2>About Me</h2>
+                    <p>${personalDescription || 'No description available'}</p>
+                    <p>Contact: ${phone}</p>
+                </div>
+            `;
+
+            // Hide skills page and show booking profile
+            document.getElementById('skillsPage').classList.add('hidden');
+            profilePage.classList.remove('hidden');
+        }
         
+        function goBackToSkills() {
+            document.getElementById('bookingProfilePage').classList.add('hidden');
+            document.getElementById('skillsPage').classList.remove('hidden');
+        }
+
         function contactSkillProvider(name, phone) {
             alert(`Contact ${name} at ${phone}`);
         }
@@ -495,6 +625,50 @@
         function goBack() {
             document.getElementById('skillsPage').classList.add('hidden');
             document.getElementById('homePage').classList.remove('hidden');
+        }
+
+        let userAchievements = [];
+        let personalDescription = '';
+
+        function addAchievement() {
+            const achievementTitle = document.getElementById('achievementTitle').value;
+            const achievementYear = document.getElementById('achievementYear').value;
+
+            if (achievementTitle && achievementYear) {
+                const newAchievement = {
+                    title: achievementTitle,
+                    year: achievementYear
+                };
+
+                userAchievements.push(newAchievement);
+                updateAchievementsList();
+
+                // Clear input fields
+                document.getElementById('achievementTitle').value = '';
+                document.getElementById('achievementYear').value = '';
+            } else {
+                alert('Please fill all achievement details');
+            }
+        }
+
+        function updateAchievementsList() {
+            const achievementsList = document.getElementById('achievementsList');
+            achievementsList.innerHTML = userAchievements.map((achievement, index) => `
+                <div class="skill-item">
+                    <div>
+                        <strong>${achievement.title}</strong>
+                        <br>Year: ${achievement.year}
+                    </div>
+                    <div>
+                        <button class="remove-skill-btn" onclick="removeAchievement(${index})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function removeAchievement(index) {
+            userAchievements.splice(index, 1);
+            updateAchievementsList();
         }
     </script>
 </body>
