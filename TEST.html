@@ -258,241 +258,244 @@
 
     <script>
         const SKILLS_DATA = {
-    'Sports': {
-        featured: [
-            { name: 'Savar Sukhija', skill: 'Basketball', fee: '150/hr', phone: '9876543210', rating: 4.5 }
-        ],
-        all: [
-            { name: 'Ridhima Goel', skill: 'Football', fee: '120/hr', phone: '9988776655', rating: 4.2 },
-            { name: 'Kanish Jindal', skill: 'Cricket Coaching', fee: '130/hr', phone: '7766554433', rating: 4.7 }
-        ]
-    },
-    'Education': {
-        featured: [
-            { name: 'Apurva Shankar', skill: 'Programming', fee: '180/hr', phone: '8899112233', rating: 4.8 }
-        ],
-        all: [
-            { name: 'Devansh Aggarwal', skill: 'Math Tutoring', fee: '100/hr', phone: '7766554433', rating: 4.3 },
-            { name: 'Ishika Gupta', skill: 'Language Lessons', fee: '120/hr', phone: '9911223344', rating: 4.6 }
-        ]
-    },
-    'Cooking': {
-        featured: [
-            { name: 'Mahek Aggarwal', skill: 'Italian Cuisine', fee: '200/session', phone: '9900112233', rating: 4.6 }
-        ],
-        all: [
-            { name: 'Savar Sukhija', skill: 'Baking', fee: '150/session', phone: '8877665544', rating: 4.7 },
-            { name: 'Ridhima Goel', skill: 'Vegetarian Cooking', fee: '130/session', phone: '7755441122', rating: 4.4 }
-        ]
-    },
-    'Music': {
-        featured: [
-            { name: 'Kanish Jindal', skill: 'Guitar Lessons', fee: '130/hr', phone: '7755441122', rating: 4.5 }
-        ],
-        all: [
-            { name: 'Apurva Shankar', skill: 'Vocal Training', fee: '160/hr', phone: '9911223344', rating: 4.7 },
-            { name: 'Devansh Aggarwal', skill: 'Piano Lessons', fee: '140/hr', phone: '8844332211', rating: 4.3 }
-        ]
-    },
-    'Art': {
-        featured: [
-            { name: 'Ishika Gupta', skill: 'Digital Art', fee: '170/hr', phone: '9988776655', rating: 4.6 }
-        ],
-        all: [
-            { name: 'Mahek Aggarwal', skill: 'Painting', fee: '120/hr', phone: '7766554433', rating: 4.4 },
-            { name: 'Savar Sukhija', skill: 'Photography', fee: '150/hr', phone: '8899112233', rating: 4.5 }
-        ]
-    },
-    'Technology': {
-        featured: [
-            { name: 'Ridhima Goel', skill: 'Web Development', fee: '190/hr', phone: '9911223344', rating: 4.7 }
-        ],
-        all: [
-            { name: 'Kanish Jindal', skill: 'App Design', fee: '160/hr', phone: '7755441122', rating: 4.5 },
-            { name: 'Apurva Shankar', skill: 'Data Science', fee: '200/hr', phone: '8844332211', rating: 4.6 }
-        ]
-    }
-};
-
-let userSkills = [];
-
-function createProfile() {
-    const fullName = document.getElementById('fullName').value;
-    const phoneNumber = document.getElementById('phoneNumber').value;
-    const registrationNumber = document.getElementById('registrationNumber').value;
-
-    if (fullName && phoneNumber.length === 10 && registrationNumber.length === 10) {
-        document.getElementById('registrationPage').classList.add('hidden');
-        document.getElementById('homePage').classList.remove('hidden');
-        
-        // Add edit profile button to home page
-        addEditProfileButton();
-    } else {
-        alert('Please fill all fields correctly');
-    }
-}
-
-function addEditProfileButton() {
-    const headerDiv = document.querySelector('#homePage .header');
-    const editButton = document.createElement('button');
-    editButton.textContent = 'Edit Profile';
-    editButton.onclick = navigateToEditProfile;
-    headerDiv.appendChild(editButton);
-}
-
-function navigateToEditProfile() {
-    document.getElementById('homePage').classList.add('hidden');
-    document.getElementById('profileEditPage').classList.remove('hidden');
-
-    // Pre-fill existing profile details
-    const fullName = document.getElementById('fullName').value;
-    const phoneNumber = document.getElementById('phoneNumber').value;
-    const registrationNumber = document.getElementById('registrationNumber').value;
-
-    document.getElementById('editFullName').value = fullName;
-    document.getElementById('editPhoneNumber').value = phoneNumber;
-    document.getElementById('editRegistrationNumber').value = registrationNumber;
-}
-
-function addSkill() {
-    const category = document.getElementById('skillCategory').value;
-    const skillName = document.getElementById('skillName').value;
-    const skillFee = document.getElementById('skillFee').value;
-
-    if (category && skillName && skillFee) {
-        const newSkill = {
-            category: category,
-            skill: skillName,
-            fee: skillFee,
-            rating: 4.0 // Default initial rating
+            'Sports': {
+                featured: [
+                    { name: 'Savar Sukhija', skill: 'Basketball', fee: '150/hr', phone: '9876543210', rating: 4.5 }
+                ],
+                all: [
+                    { name: 'Ridhima Goel', skill: 'Football', fee: '120/hr', phone: '9988776655', rating: 4.2 },
+                    { name: 'Kanish Jindal', skill: 'Cricket Coaching', fee: '130/hr', phone: '7766554433', rating: 4.7 }
+                ]
+            },
+            'Education': {
+                featured: [
+                    { name: 'Apurva Shankar', skill: 'Programming', fee: '180/hr', phone: '8899112233', rating: 4.8 }
+                ],
+                all: [
+                    { name: 'Devansh Aggarwal', skill: 'Math Tutoring', fee: '100/hr', phone: '7766554433', rating: 4.3 },
+                    { name: 'Ishika Gupta', skill: 'Language Lessons', fee: '120/hr', phone: '9911223344', rating: 4.6 }
+                ]
+            },
+            'Cooking': {
+                featured: [
+                    { name: 'Mahek Aggarwal', skill: 'Italian Cuisine', fee: '200/session', phone: '9900112233', rating: 4.6 }
+                ],
+                all: [
+                    { name: 'Savar Sukhija', skill: 'Baking', fee: '150/session', phone: '8877665544', rating: 4.7 },
+                    { name: 'Ridhima Goel', skill: 'Vegetarian Cooking', fee: '130/session', phone: '7755441122', rating: 4.4 }
+                ]
+            },
+            'Music': {
+                featured: [
+                    { name: 'Kanish Jindal', skill: 'Guitar Lessons', fee: '130/hr', phone: '7755441122', rating: 4.5 }
+                ],
+                all: [
+                    { name: 'Apurva Shankar', skill: 'Vocal Training', fee: '160/hr', phone: '9911223344', rating: 4.7 },
+                    { name: 'Devansh Aggarwal', skill: 'Piano Lessons', fee: '140/hr', phone: '8844332211', rating: 4.3 }
+                ]
+            },
+            'Art': {
+                featured: [
+                    { name: 'Ishika Gupta', skill: 'Digital Art', fee: '170/hr', phone: '9988776655', rating: 4.6 }
+                ],
+                all: [
+                    { name: 'Mahek Aggarwal', skill: 'Painting', fee: '120/hr', phone: '7766554433', rating: 4.4 },
+                    { name: 'Savar Sukhija', skill: 'Photography', fee: '150/hr', phone: '8899112233', rating: 4.5 }
+                ]
+            },
+            'Technology': {
+                featured: [
+                    { name: 'Ridhima Goel', skill: 'Web Development', fee: '190/hr', phone: '9911223344', rating: 4.7 }
+                ],
+                all: [
+                    { name: 'Kanish Jindal', skill: 'App Design', fee: '160/hr', phone: '7755441122', rating: 4.5 },
+                    { name: 'Apurva Shankar', skill: 'Data Science', fee: '200/hr', phone: '8844332211', rating: 4.6 }
+                ]
+            }
         };
 
-        userSkills.push(newSkill);
-        updateMySkillsList();
-
-        // Clear input fields
-        document.getElementById('skillCategory').value = '';
-        document.getElementById('skillName').value = '';
-        document.getElementById('skillFee').value = '';
-    } else {
-        alert('Please fill all skill details');
-    }
-}
-
-function updateMySkillsList() {
-    const mySkillsList = document.getElementById('mySkillsList');
-    mySkillsList.innerHTML = userSkills.map((skill, index) => `
-        <div class="skill-item">
-            <div>
-                <strong>${skill.skill}</strong> in ${skill.category}
-                <br>Fee: ${skill.fee}
-                <br>Initial Rating: ★ 4.0/5
-            </div>
-            <div>
-                <button class="remove-skill-btn" onclick="removeSkill(${index})">Remove</button>
-            </div>
-        </div>
-    `).join('');
-}
-
-function removeSkill(index) {
-    userSkills.splice(index, 1);
-    updateMySkillsList();
-}
-
-function saveProfile() {
-    const fullName = document.getElementById('editFullName').value;
-    const phoneNumber = document.getElementById('editPhoneNumber').value;
-    const registrationNumber = document.getElementById('editRegistrationNumber').value;
-
-    if (fullName && phoneNumber.length === 10 && registrationNumber.length === 10) {
-        // In a real application, you would save this to a backend
-        alert('Profile saved successfully!');
+        let userSkills = [];
         
-        // Update SKILLS_DATA with user's skills
-        userSkills.forEach(skill => {
-            if (!SKILLS_DATA[skill.category].all.some(s => s.name === fullName)) {
-                SKILLS_DATA[skill.category].all.push({
-                    name: fullName,
-                    skill: skill.skill,
-                    fee: skill.fee,
-                    phone: phoneNumber,
-                    rating: 4.0
+        function createProfile() {
+            const fullName = document.getElementById('fullName').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const registrationNumber = document.getElementById('registrationNumber').value;
+        
+            if (fullName && phoneNumber.length === 10 && registrationNumber.length === 10) {
+                document.getElementById('registrationPage').classList.add('hidden');
+                document.getElementById('homePage').classList.remove('hidden');
+                
+                // Add edit profile button to home page
+                addEditProfileButton();
+            } else {
+                alert('Please fill all fields correctly');
+            }
+        }
+        
+        function addEditProfileButton() {
+            const headerDiv = document.querySelector('#homePage .header');
+            const editButton = document.createElement('button');
+            editButton.textContent = 'Edit Profile';
+            editButton.onclick = navigateToEditProfile;
+            headerDiv.appendChild(editButton);
+        }
+        
+        function navigateToEditProfile() {
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('profileEditPage').classList.remove('hidden');
+        
+            // Pre-fill existing profile details
+            const fullName = document.getElementById('fullName').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const registrationNumber = document.getElementById('registrationNumber').value;
+        
+            document.getElementById('editFullName').value = fullName;
+            document.getElementById('editPhoneNumber').value = phoneNumber;
+            document.getElementById('editRegistrationNumber').value = registrationNumber;
+        }
+        
+        function addSkill() {
+            const category = document.getElementById('skillCategory').value;
+            const skillName = document.getElementById('skillName').value;
+            const skillFee = document.getElementById('skillFee').value;
+        
+            if (category && skillName && skillFee) {
+                const newSkill = {
+                    category: category,
+                    skill: skillName,
+                    fee: skillFee,
+                    rating: 4.0 // Default initial rating
+                };
+        
+                userSkills.push(newSkill);
+                updateMySkillsList();
+        
+                // Clear input fields
+                document.getElementById('skillCategory').value = '';
+                document.getElementById('skillName').value = '';
+                document.getElementById('skillFee').value = '';
+            } else {
+                alert('Please fill all skill details');
+            }
+        }
+        
+        function updateMySkillsList() {
+            const mySkillsList = document.getElementById('mySkillsList');
+            mySkillsList.innerHTML = userSkills.map((skill, index) => `
+                <div class="skill-item">
+                    <div>
+                        <strong>${skill.skill}</strong> in ${skill.category}
+                        <br>Fee: ${skill.fee}
+                        <br>Initial Rating: ★ 4.0/5
+                    </div>
+                    <div>
+                        <button class="remove-skill-btn" onclick="removeSkill(${index})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function removeSkill(index) {
+            userSkills.splice(index, 1);
+            updateMySkillsList();
+        }
+        
+        function saveProfile() {
+            const fullName = document.getElementById('editFullName').value;
+            const phoneNumber = document.getElementById('editPhoneNumber').value;
+            const registrationNumber = document.getElementById('editRegistrationNumber').value;
+        
+            if (fullName && phoneNumber.length === 10 && registrationNumber.length === 10) {
+                // In a real application, you would save this to a backend
+                alert('Profile saved successfully!');
+                
+                // Update SKILLS_DATA with user's skills
+                userSkills.forEach(skill => {
+                    if (!SKILLS_DATA[skill.category].all.some(s => s.name === fullName)) {
+                        SKILLS_DATA[skill.category].all.push({
+                            name: fullName,
+                            skill: skill.skill,
+                            fee: skill.fee,
+                            phone: phoneNumber,
+                            rating: 4.0
+                        });
+                    }
                 });
+        
+                // Update registration page details
+                document.getElementById('fullName').value = fullName;
+                document.getElementById('phoneNumber').value = phoneNumber;
+                document.getElementById('registrationNumber').value = registrationNumber;
+        
+                // Return to home page
+                document.getElementById('profileEditPage').classList.add('hidden');
+                document.getElementById('homePage').classList.remove('hidden');
+            } else {
+                alert('Please fill all fields correctly');
+            }
+        }
+        
+        function cancelEdit() {
+            document.getElementById('profileEditPage').classList.add('hidden');
+            document.getElementById('homePage').classList.remove('hidden');
+        }
+        
+        // Category and Skills Page Functions
+        document.querySelector('.categories').addEventListener('click', function(event) {
+            const categoryEl = event.target.closest('.category');
+            if (categoryEl) {
+                const category = categoryEl.dataset.category;
+                openSkillCategory(category);
             }
         });
-
-        // Update registration page details
-        document.getElementById('fullName').value = fullName;
-        document.getElementById('phoneNumber').value = phoneNumber;
-        document.getElementById('registrationNumber').value = registrationNumber;
-
-        // Return to home page
-        document.getElementById('profileEditPage').classList.add('hidden');
-        document.getElementById('homePage').classList.remove('hidden');
-    } else {
-        alert('Please fill all fields correctly');
-    }
-}
-
-function cancelEdit() {
-    document.getElementById('profileEditPage').classList.add('hidden');
-    document.getElementById('homePage').classList.remove('hidden');
-}
-
-// Category and Skills Page Functions
-document.querySelector('.categories').addEventListener('click', function(event) {
-    const categoryEl = event.target.closest('.category');
-    if (categoryEl) {
-        const category = categoryEl.dataset.category;
-        openSkillCategory(category);
-    }
-});
-
-function openSkillCategory(category) {
-    const categoryTitle = document.getElementById('categoryTitle');
-    const featuredSkillsList = document.getElementById('featuredSkillsList');
-    const allSkillsList = document.getElementById('allSkillsList');
-    
-    categoryTitle.textContent = category;
-    
-    const categoryData = SKILLS_DATA[category];
-
-    featuredSkillsList.innerHTML = categoryData.featured.map(skill => `
-        <div class="skill-item">
-            <div>
-                <strong>${skill.name}</strong> - ${skill.skill}
-                <br>Fee: ${skill.fee}
-                <br>Rating: ★ ${skill.rating}/5
-            </div>
-            <div>
-                <button onclick="contactSkillProvider('${skill.name}', '${skill.phone}')">Contact</button>
-            </div>
-        </div>
-    `).join('');
-
-    allSkillsList.innerHTML = categoryData.all.map(skill => `
-        <div class="skill-item">
-            <div>
-                <strong>${skill.name}</strong> - ${skill.skill}
-                <br>Fee: ${skill.fee}
-                <br>Rating: ★ ${skill.rating}/5
-            </div>
-            <div>
-                <button onclick="contactSkillProvider('${skill.name}', '${skill.phone}')">Contact</button>
-            </div>
-        </div>
-    `).join('');
-
-    document.getElementById('homePage').classList.add('hidden');
-    document.getElementById('skillsPage').classList.remove('hidden');
-}
-
-function contactSkillProvider(name, phone) {
-    alert(`Contact ${name} at ${phone}`);
-}
-
-function goBack() {
-    document.getElementById('skillsPage').classList.add('hidden');
-    document.getElementById('homePage').classList.remove('hidden');
-}
+        
+        function openSkillCategory(category) {
+            const categoryTitle = document.getElementById('categoryTitle');
+            const featuredSkillsList = document.getElementById('featuredSkillsList');
+            const allSkillsList = document.getElementById('allSkillsList');
+            
+            categoryTitle.textContent = category;
+            
+            const categoryData = SKILLS_DATA[category];
+        
+            featuredSkillsList.innerHTML = categoryData.featured.map(skill => `
+                <div class="skill-item">
+                    <div>
+                        <strong>${skill.name}</strong> - ${skill.skill}
+                        <br>Fee: ${skill.fee}
+                        <br>Rating: ★ ${skill.rating}/5
+                    </div>
+                    <div>
+                        <button onclick="contactSkillProvider('${skill.name}', '${skill.phone}')">Contact</button>
+                    </div>
+                </div>
+            `).join('');
+        
+            allSkillsList.innerHTML = categoryData.all.map(skill => `
+                <div class="skill-item">
+                    <div>
+                        <strong>${skill.name}</strong> - ${skill.skill}
+                        <br>Fee: ${skill.fee}
+                        <br>Rating: ★ ${skill.rating}/5
+                    </div>
+                    <div>
+                        <button onclick="contactSkillProvider('${skill.name}', '${skill.phone}')">Contact</button>
+                    </div>
+                </div>
+            `).join('');
+        
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('skillsPage').classList.remove('hidden');
+        }
+        
+        function contactSkillProvider(name, phone) {
+            alert(`Contact ${name} at ${phone}`);
+        }
+        
+        function goBack() {
+            document.getElementById('skillsPage').classList.add('hidden');
+            document.getElementById('homePage').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
