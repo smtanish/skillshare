@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Skill Swap - Manipal Jaipur</title>
     <style>
+        /* Previous CSS styles remain exactly the same */
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -189,8 +190,7 @@
     </style>
 </head>
 <body>
-    <!-- Previous parts of the HTML remain the same -->
-    <!-- Registration Page -->
+    <!-- HTML structure remains exactly the same -->
     <div class="container" id="registrationPage">
         <div class="header">
             <h1>Skill Swap</h1>
@@ -202,7 +202,6 @@
         <button onclick="createProfile()">Create Profile</button>
     </div>
 
-    <!-- Home Page -->
     <div class="container hidden" id="homePage">
         <div class="header">
             <h1>Skill Swap</h1>
@@ -236,7 +235,6 @@
         </div>
     </div>
 
-    <!-- Skills Page -->
     <div class="container hidden" id="skillsPage">
         <div class="header">
             <h1 id="categoryTitle"></h1>
@@ -247,8 +245,7 @@
         <h2 class="section-title">All Skills</h2>
         <div class="skills-list" id="allSkillsList"></div>
     </div>
- 
-    <!-- Profile Edit Page -->
+
     <div class="container hidden" id="profileEditPage">
         <div class="header">
             <h1>Edit Profile</h1>
@@ -259,8 +256,6 @@
             <input type="text" id="editFullName" placeholder="Full Name">
             <input type="tel" id="editPhoneNumber" placeholder="Phone Number" maxlength="10">
             <input type="text" id="editRegistrationNumber" placeholder="Registration Number" maxlength="10">
-            
-            <!-- New Personal Description Section -->
             <textarea id="personalDescription" placeholder="Tell us about yourself (max 300 characters)" maxlength="300" rows="4"></textarea>
             
             <div class="skills-input-container">
@@ -283,7 +278,6 @@
                 <div id="mySkillsList"></div>
             </div>
             
-            <!-- New Achievements Section -->
             <div class="achievements-section">
                 <h2>My Achievements</h2>
                 <div id="achievementsList"></div>
@@ -298,10 +292,9 @@
                 <button onclick="saveProfile()">Save Profile</button>
                 <button onclick="cancelEdit()">Cancel</button>
             </div>
-
         </div>
     </div>
-    <!--Booking Profile page-->
+
     <div class="container hidden" id="bookingProfilePage">
         <div class="profile-overview">
             <div class="profile-header">
@@ -329,347 +322,87 @@
         </div>
     </div>
 
-    <!-- Previous script remains the same, with added functions -->
     <script>
-        // Previous script code remains the same, with these additions:
+        // Updated SKILLS_DATA with enhanced profiles
         const SKILLS_DATA = {
             'Sports': {
                 featured: [
-                    { name: 'Savar Sukhija', skill: 'Basketball', fee: '150/hr', phone: '9876543210', rating: 4.5 }
+                    {
+                        name: 'Savar Sukhija',
+                        skill: 'Basketball',
+                        fee: '150/hr',
+                        phone: '9876543210',
+                        rating: 4.5,
+                        description: "State-level basketball player with 5 years of coaching experience.",
+                        achievements: [
+                            { title: "State Basketball Championship Gold", year: "2023" },
+                            { title: "University Team Captain", year: "2022" },
+                            { title: "Best Player Award - Inter-College", year: "2021" }
+                        ]
+                    }
                 ],
                 all: [
-                    { name: 'Ridhima Goel', skill: 'Football', fee: '120/hr', phone: '9988776655', rating: 4.2 },
-                    { name: 'Kanish Jindal', skill: 'Cricket Coaching', fee: '130/hr', phone: '7766554433', rating: 4.7 }
+                    {
+                        name: 'Ridhima Goel',
+                        skill: 'Football',
+                        fee: '120/hr',
+                        phone: '9988776655',
+                        rating: 4.2,
+                        description: "Certified football coach with expertise in defensive tactics.",
+                        achievements: [
+                            { title: "Football Coaching License - Level 2", year: "2023" },
+                            { title: "University Football Team Vice-Captain", year: "2022" }
+                        ]
+                    },
+                    {
+                        name: 'Kanish Jindal',
+                        skill: 'Cricket Coaching',
+                        fee: '130/hr',
+                        phone: '7766554433',
+                        rating: 4.7,
+                        description: "Former district-level cricket player specializing in batting techniques.",
+                        achievements: [
+                            { title: "District Cricket Championship Winner", year: "2023" },
+                            { title: "Best Batsman Award - University", year: "2022" }
+                        ]
+                    }
                 ]
             },
             'Education': {
                 featured: [
-                    { name: 'Apurva Shankar', skill: 'Programming', fee: '180/hr', phone: '8899112233', rating: 4.8 }
-                ],
-                all: [
-                    { name: 'Devansh Aggarwal', skill: 'Math Tutoring', fee: '100/hr', phone: '7766554433', rating: 4.3 },
-                    { name: 'Ishika Gupta', skill: 'Language Lessons', fee: '120/hr', phone: '9911223344', rating: 4.6 }
-                ]
-            },
-            'Cooking': {
-                featured: [
-                    { name: 'Mahek Aggarwal', skill: 'Italian Cuisine', fee: '200/session', phone: '9900112233', rating: 4.6 }
-                ],
-                all: [
-                    { name: 'Savar Sukhija', skill: 'Baking', fee: '150/session', phone: '8877665544', rating: 4.7 },
-                    { name: 'Ridhima Goel', skill: 'Vegetarian Cooking', fee: '130/session', phone: '7755441122', rating: 4.4 }
-                ]
-            },
-            'Music': {
-                featured: [
-                    { name: 'Kanish Jindal', skill: 'Guitar Lessons', fee: '130/hr', phone: '7755441122', rating: 4.5 }
-                ],
-                all: [
-                    { name: 'Apurva Shankar', skill: 'Vocal Training', fee: '160/hr', phone: '9911223344', rating: 4.7 },
-                    { name: 'Devansh Aggarwal', skill: 'Piano Lessons', fee: '140/hr', phone: '8844332211', rating: 4.3 }
-                ]
-            },
-            'Art': {
-                featured: [
-                    { name: 'Ishika Gupta', skill: 'Digital Art', fee: '170/hr', phone: '9988776655', rating: 4.6 }
-                ],
-                all: [
-                    { name: 'Mahek Aggarwal', skill: 'Painting', fee: '120/hr', phone: '7766554433', rating: 4.4 },
-                    { name: 'Savar Sukhija', skill: 'Photography', fee: '150/hr', phone: '8899112233', rating: 4.5 }
-                ]
-            },
-            'Technology': {
-                featured: [
-                    { name: 'Ridhima Goel', skill: 'Web Development', fee: '190/hr', phone: '9911223344', rating: 4.7 }
-                ],
-                all: [
-                    { name: 'Kanish Jindal', skill: 'App Design', fee: '160/hr', phone: '7755441122', rating: 4.5 },
-                    { name: 'Apurva Shankar', skill: 'Data Science', fee: '200/hr', phone: '8844332211', rating: 4.6 }
-                ]
-            }
-        };
-
-        let userSkills = [];
-        
-        function createProfile() {
-            const fullName = document.getElementById('fullName').value;
-            const phoneNumber = document.getElementById('phoneNumber').value;
-            const registrationNumber = document.getElementById('registrationNumber').value;
-        
-            if (fullName && phoneNumber.length === 10 && registrationNumber.length === 10) {
-                document.getElementById('registrationPage').classList.add('hidden');
-                document.getElementById('homePage').classList.remove('hidden');
-                
-                // Add edit profile button to home page
-                addEditProfileButton();
-            } else {
-                alert('Please fill all fields correctly');
-            }
-        }
-        
-        function addEditProfileButton() {
-            const headerDiv = document.querySelector('#homePage .header');
-            const editButton = document.createElement('button');
-            editButton.textContent = 'Edit Profile';
-            editButton.onclick = navigateToEditProfile;
-            headerDiv.appendChild(editButton);
-        }
-        
-        function navigateToEditProfile() {
-            document.getElementById('homePage').classList.add('hidden');
-            document.getElementById('profileEditPage').classList.remove('hidden');
-        
-            // Pre-fill existing profile details
-            const fullName = document.getElementById('fullName').value;
-            const phoneNumber = document.getElementById('phoneNumber').value;
-            const registrationNumber = document.getElementById('registrationNumber').value;
-        
-            document.getElementById('editFullName').value = fullName;
-            document.getElementById('editPhoneNumber').value = phoneNumber;
-            document.getElementById('editRegistrationNumber').value = registrationNumber;
-            document.getElementById('personalDescription').value = personalDescription;
-            updateAchievementsList();
-        }
-        
-        function addSkill() {
-            const category = document.getElementById('skillCategory').value;
-            const skillName = document.getElementById('skillName').value;
-            const skillFee = document.getElementById('skillFee').value;
-        
-            if (category && skillName && skillFee) {
-                const newSkill = {
-                    category: category,
-                    skill: skillName,
-                    fee: skillFee,
-                    rating: 4.0 // Default initial rating
-                };
-        
-                userSkills.push(newSkill);
-                updateMySkillsList();
-        
-                // Clear input fields
-                document.getElementById('skillCategory').value = '';
-                document.getElementById('skillName').value = '';
-                document.getElementById('skillFee').value = '';
-            } else {
-                alert('Please fill all skill details');
-            }
-        }
-        
-        function updateMySkillsList() {
-            const mySkillsList = document.getElementById('mySkillsList');
-            mySkillsList.innerHTML = userSkills.map((skill, index) => `
-                <div class="skill-item">
-                    <div>
-                        <strong>${skill.skill}</strong> in ${skill.category}
-                        <br>Fee: ${skill.fee}
-                        <br>Initial Rating: ★ 4.0/5
-                    </div>
-                    <div>
-                        <button class="remove-skill-btn" onclick="removeSkill(${index})">Remove</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function removeSkill(index) {
-            userSkills.splice(index, 1);
-            updateMySkillsList();
-        }
-        
-        function saveProfile() {
-            const fullName = document.getElementById('editFullName').value;
-            const phoneNumber = document.getElementById('editPhoneNumber').value;
-            const registrationNumber = document.getElementById('editRegistrationNumber').value;
-            personalDescription = document.getElementById('personalDescription').value;
-
-            if (fullName && phoneNumber.length === 10 && registrationNumber.length === 10) {
-                // Previous save logic remains the same
-                // Update SKILLS_DATA with user's skills
-                userSkills.forEach(skill => {
-                    if (!SKILLS_DATA[skill.category].all.some(s => s.name === fullName)) {
-                        SKILLS_DATA[skill.category].all.push({
-                            name: fullName,
-                            skill: skill.skill,
-                            fee: skill.fee,
-                            phone: phoneNumber,
-                            rating: 4.0
-                        });
+                    {
+                        name: 'Apurva Shankar',
+                        skill: 'Programming',
+                        fee: '180/hr',
+                        phone: '8899112233',
+                        rating: 4.8,
+                        description: "Full-stack developer with expertise in Python and JavaScript.",
+                        achievements: [
+                            { title: "Google Code Jam Finalist", year: "2023" },
+                            { title: "Hackathon Winner - Smart India", year: "2022" },
+                            { title: "Published Research Paper on ML", year: "2023" }
+                        ]
                     }
-                }); 
-                // Additional logic to save description and achievements
-                alert('Profile saved successfully!\n\n' + 
-                      'Description: ' + personalDescription + 
-                      '\n\nAchievements: ' + userAchievements.length);
-
-                // Update registration page details
-                document.getElementById('fullName').value = fullName;
-                document.getElementById('phoneNumber').value = phoneNumber;
-                document.getElementById('registrationNumber').value = registrationNumber;
-                // Return to home page
-                document.getElementById('profileEditPage').classList.add('hidden');
-                document.getElementById('homePage').classList.remove('hidden');
-            } else {
-                alert('Please fill all fields correctly');
-            }
-        }
-        
-        function cancelEdit() {
-            document.getElementById('profileEditPage').classList.add('hidden');
-            document.getElementById('homePage').classList.remove('hidden');
-        }
-        
-        // Category and Skills Page Functions
-        document.querySelector('.categories').addEventListener('click', function(event) {
-            const categoryEl = event.target.closest('.category');
-            if (categoryEl) {
-                const category = categoryEl.dataset.category;
-                openSkillCategory(category);
-            }
-        });
-        
-        function openSkillCategory(category) {
-            const categoryTitle = document.getElementById('categoryTitle');
-            const featuredSkillsList = document.getElementById('featuredSkillsList');
-            const allSkillsList = document.getElementById('allSkillsList');
-            
-            categoryTitle.textContent = category;
-            
-            const categoryData = SKILLS_DATA[category];
-        
-            featuredSkillsList.innerHTML = categoryData.featured.map(skill => `
-                <div class="skill-item">
-                    <div>
-                        <strong>${skill.name}</strong> - ${skill.skill}
-                        <br>Fee: ${skill.fee}
-                        <br>Rating: ★ ${skill.rating}/5
-                    </div>
-                    <div>
-                        <button onclick="openBookingProfile('${skill.name}', '${skill.skill}', '${skill.fee}', '${skill.phone}')">Book</button>
-                    </div>
-                </div>
-            `).join('');
-        
-            allSkillsList.innerHTML = categoryData.all.map(skill => `
-                <div class="skill-item">
-                    <div>
-                        <strong>${skill.name}</strong> - ${skill.skill}
-                        <br>Fee: ${skill.fee}
-                        <br>Rating: ★ ${skill.rating}/5
-                    </div>
-                    <div>
-                        <button onclick="openBookingProfile('${skill.name}', '${skill.skill}', '${skill.fee}', '${skill.phone}')">Book</button>
-                    </div>
-                </div>
-            `).join('');
-        
-            document.getElementById('homePage').classList.add('hidden');
-            document.getElementById('skillsPage').classList.remove('hidden');
-        }
-
-        function openBookingProfile(name, skill, fee, phone) {
-            const profilePage = document.getElementById('bookingProfilePage');
-            const profileName = document.getElementById('profileName');
-            const profileSkill = document.getElementById('profileSkill');
-            const profileFee = document.getElementById('profileFee');
-            const profileSkillsList = document.getElementById('profileSkillsList');
-            const profileAchievementsList = document.getElementById('profileAchievementsList');
-            const profileDescription = document.getElementById('profileDescription');
-
-            // Set basic profile information
-            profileName.textContent = name;
-            profileSkill.textContent = skill;
-            profileFee.textContent = `Fee: ${fee}`;
-
-            // Find user skills
-            const userMatchedSkills = userSkills.filter(s => s.skill === skill);
-            profileSkillsList.innerHTML = userMatchedSkills.map(s => `
-                <div>
-                    <strong>${s.skill}</strong> in ${s.category}
-                    <br>Fee: ${s.fee}
-                    <br>Initial Rating: ★ 4.0/5
-                </div>
-            `).join('');
-
-            // Display achievements
-            profileAchievementsList.innerHTML = userAchievements.map(a => `
-                <div>
-                    <strong>${a.title}</strong>
-                    <br>Year: ${a.year}
-                </div>
-            `).join('');
-
-            // Set personal description
-            profileDescription.innerHTML = `
-                <div class="profile-skills" style="margin-top: 15px;">
-                    <h2>About Me</h2>
-                    <p>${personalDescription || 'No description available'}</p>
-                    <p>Contact: ${phone}</p>
-                </div>
-            `;
-
-            // Hide skills page and show booking profile
-            document.getElementById('skillsPage').classList.add('hidden');
-            profilePage.classList.remove('hidden');
-        }
-        
-        function goBackToSkills() {
-            document.getElementById('bookingProfilePage').classList.add('hidden');
-            document.getElementById('skillsPage').classList.remove('hidden');
-        }
-
-        function contactSkillProvider(name, phone) {
-            alert(`Contact ${name} at ${phone}`);
-        }
-        
-        function goBack() {
-            document.getElementById('skillsPage').classList.add('hidden');
-            document.getElementById('homePage').classList.remove('hidden');
-        }
-
-        let userAchievements = [];
-        let personalDescription = '';
-
-        function addAchievement() {
-            const achievementTitle = document.getElementById('achievementTitle').value;
-            const achievementYear = document.getElementById('achievementYear').value;
-
-            if (achievementTitle && achievementYear) {
-                const newAchievement = {
-                    title: achievementTitle,
-                    year: achievementYear
-                };
-
-                userAchievements.push(newAchievement);
-                updateAchievementsList();
-
-                // Clear input fields
-                document.getElementById('achievementTitle').value = '';
-                document.getElementById('achievementYear').value = '';
-            } else {
-                alert('Please fill all achievement details');
-            }
-        }
-
-        function updateAchievementsList() {
-            const achievementsList = document.getElementById('achievementsList');
-            achievementsList.innerHTML = userAchievements.map((achievement, index) => `
-                <div class="skill-item">
-                    <div>
-                        <strong>${achievement.title}</strong>
-                        <br>Year: ${achievement.year}
-                    </div>
-                    <div>
-                        <button class="remove-skill-btn" onclick="removeAchievement(${index})">Remove</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function removeAchievement(index) {
-            userAchievements.splice(index, 1);
-            updateAchievementsList();
-        }
-    </script>
-</body>
-</html>
+                ],
+                all: [
+                    {
+                        name: 'Devansh Aggarwal',
+                        skill: 'Math Tutoring',
+                        fee: '100/hr',
+                        phone: '7766554433',
+                        rating: 4.3,
+                        description: "Mathematics enthusiast specializing in Calculus and Linear Algebra.",
+                        achievements: [
+                            { title: "Math Olympiad Gold Medalist", year: "2023" },
+                            { title: "Perfect GRE Math Score", year: "2022" }
+                        ]
+                    },
+                    {
+                        name: 'Ishika Gupta',
+                        skill: 'Language Lessons',
+                        fee: '120/hr',
+                        phone: '9911223344',
+                        rating: 4.6,
+                        description: "Multilingual teacher proficient in English, French, and Spanish.",
+                        achievements: [
+                            { title: "DELF B2 Certification", year: "2023" },
