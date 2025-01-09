@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Skill Share - Manipal Jaipur</title>
+    <title>Skill Swap - Manipal Jaipur</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -34,7 +34,7 @@
             color: #7f8c8d;
             font-size: 0.9em;
         }
-        input {
+        input, textarea {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -102,13 +102,98 @@
             border-bottom: 2px solid #3498db;
             padding-bottom: 10px;
         }
-        .hidden { display: none !important; }
+        .hidden { 
+            display: none !important; 
+        }
+        .edit-profile-form {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .edit-profile-form input, 
+        .edit-profile-form select,
+        .edit-profile-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+        .skills-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .remove-skill-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .add-skill-btn {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .my-skills-section {
+            margin-top: 20px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .achievements-section {
+            margin-top: 20px;
+            background-color: #f1f8ff;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .edit-profile-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .edit-profile-buttons button {
+            flex: 1;
+        }
+        .profile-overview {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .profile-skills, .profile-achievements {
+            background-color: #f0f4f8;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .profile-action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .back-button {
+            background-color: #95a5a6;
+        }
     </style>
 </head>
 <body>
+    <!-- Previous parts of the HTML remain the same -->
+    <!-- Registration Page -->
     <div class="container" id="registrationPage">
         <div class="header">
-            <h1>Skill Share</h1>
+            <h1>Skill Swap</h1>
             <p>Manipal Jaipur</p>
         </div>
         <input type="text" placeholder="Full Name" id="fullName" maxlength="50">
@@ -117,9 +202,10 @@
         <button onclick="createProfile()">Create Profile</button>
     </div>
 
+    <!-- Home Page -->
     <div class="container hidden" id="homePage">
         <div class="header">
-            <h1>Skill Share</h1>
+            <h1>Skill Swap</h1>
             <p>Discover Campus Talents</p>
         </div>
         <div class="categories">
@@ -150,6 +236,7 @@
         </div>
     </div>
 
+    <!-- Skills Page -->
     <div class="container hidden" id="skillsPage">
         <div class="header">
             <h1 id="categoryTitle"></h1>
@@ -160,8 +247,91 @@
         <h2 class="section-title">All Skills</h2>
         <div class="skills-list" id="allSkillsList"></div>
     </div>
+ 
+    <!-- Profile Edit Page -->
+    <div class="container hidden" id="profileEditPage">
+        <div class="header">
+            <h1>Edit Profile</h1>
+            <p>Manage Your Skills and Information</p>
+        </div>
+        
+        <div class="edit-profile-form">
+            <input type="text" id="editFullName" placeholder="Full Name">
+            <input type="tel" id="editPhoneNumber" placeholder="Phone Number" maxlength="10">
+            <input type="text" id="editRegistrationNumber" placeholder="Registration Number" maxlength="10">
+            
+            <!-- New Personal Description Section -->
+            <textarea id="personalDescription" placeholder="Tell us about yourself (max 300 characters)" maxlength="300" rows="4"></textarea>
+            
+            <div class="skills-input-container">
+                <select id="skillCategory">
+                    <option value="">Select Skill Category</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Education">Education</option>
+                    <option value="Cooking">Cooking</option>
+                    <option value="Music">Music</option>
+                    <option value="Art">Art</option>
+                    <option value="Technology">Technology</option>
+                </select>
+                <input type="text" id="skillName" placeholder="Specific Skill">
+                <input type="text" id="skillFee" placeholder="Fee (e.g., 150/hr)">
+            </div>
+            <button class="add-skill-btn" onclick="addSkill()">Add Skill</button>
+            
+            <div class="my-skills-section">
+                <h2>My Skills</h2>
+                <div id="mySkillsList"></div>
+            </div>
+            
+            <!-- New Achievements Section -->
+            <div class="achievements-section">
+                <h2>My Achievements</h2>
+                <div id="achievementsList"></div>
+                <div class="skills-input-container">
+                    <input type="text" id="achievementTitle" placeholder="Achievement Title">
+                    <input type="text" id="achievementYear" placeholder="Year" maxlength="4">
+                </div>
+                <button class="add-skill-btn" onclick="addAchievement()">Add Achievement</button>
+            </div>
+            
+            <div class="edit-profile-buttons">
+                <button onclick="saveProfile()">Save Profile</button>
+                <button onclick="cancelEdit()">Cancel</button>
+            </div>
 
+        </div>
+    </div>
+    <!--Booking Profile page-->
+    <div class="container hidden" id="bookingProfilePage">
+        <div class="profile-overview">
+            <div class="profile-header">
+                <h1 id="profileName"></h1>
+                <p id="profileSkill"></p>
+                <p id="profileFee"></p>
+            </div>
+            
+            <div class="profile-skills">
+                <h2>Skills</h2>
+                <div id="profileSkillsList"></div>
+            </div>
+            
+            <div class="profile-achievements">
+                <h2>Achievements</h2>
+                <div id="profileAchievementsList"></div>
+            </div>
+            
+            <div id="profileDescription"></div>
+            
+            <div class="profile-action-buttons">
+                <button onclick="goBackToSkills()">Back to Skills</button>
+                <button>Book Session</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Previous script remains the same, with added functions -->
     <script>
+        // Previous script code remains the same, with these additions:
         const SKILLS_DATA = {
             'Sports': {
                 featured: [
@@ -219,19 +389,137 @@
             }
         };
 
+        let userSkills = [];
+        
         function createProfile() {
             const fullName = document.getElementById('fullName').value;
             const phoneNumber = document.getElementById('phoneNumber').value;
             const registrationNumber = document.getElementById('registrationNumber').value;
-
+        
             if (fullName && phoneNumber.length === 10 && registrationNumber.length === 10) {
                 document.getElementById('registrationPage').classList.add('hidden');
+                document.getElementById('homePage').classList.remove('hidden');
+                
+                // Add edit profile button to home page
+                addEditProfileButton();
+            } else {
+                alert('Please fill all fields correctly');
+            }
+        }
+        
+        function addEditProfileButton() {
+            const headerDiv = document.querySelector('#homePage .header');
+            const editButton = document.createElement('button');
+            editButton.textContent = 'Edit Profile';
+            editButton.onclick = navigateToEditProfile;
+            headerDiv.appendChild(editButton);
+        }
+        
+        function navigateToEditProfile() {
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('profileEditPage').classList.remove('hidden');
+        
+            // Pre-fill existing profile details
+            const fullName = document.getElementById('fullName').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const registrationNumber = document.getElementById('registrationNumber').value;
+        
+            document.getElementById('editFullName').value = fullName;
+            document.getElementById('editPhoneNumber').value = phoneNumber;
+            document.getElementById('editRegistrationNumber').value = registrationNumber;
+            document.getElementById('personalDescription').value = personalDescription;
+            updateAchievementsList();
+        }
+        
+        function addSkill() {
+            const category = document.getElementById('skillCategory').value;
+            const skillName = document.getElementById('skillName').value;
+            const skillFee = document.getElementById('skillFee').value;
+        
+            if (category && skillName && skillFee) {
+                const newSkill = {
+                    category: category,
+                    skill: skillName,
+                    fee: skillFee,
+                    rating: 4.0 // Default initial rating
+                };
+        
+                userSkills.push(newSkill);
+                updateMySkillsList();
+        
+                // Clear input fields
+                document.getElementById('skillCategory').value = '';
+                document.getElementById('skillName').value = '';
+                document.getElementById('skillFee').value = '';
+            } else {
+                alert('Please fill all skill details');
+            }
+        }
+        
+        function updateMySkillsList() {
+            const mySkillsList = document.getElementById('mySkillsList');
+            mySkillsList.innerHTML = userSkills.map((skill, index) => `
+                <div class="skill-item">
+                    <div>
+                        <strong>${skill.skill}</strong> in ${skill.category}
+                        <br>Fee: ${skill.fee}
+                        <br>Initial Rating: ★ 4.0/5
+                    </div>
+                    <div>
+                        <button class="remove-skill-btn" onclick="removeSkill(${index})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function removeSkill(index) {
+            userSkills.splice(index, 1);
+            updateMySkillsList();
+        }
+        
+        function saveProfile() {
+            const fullName = document.getElementById('editFullName').value;
+            const phoneNumber = document.getElementById('editPhoneNumber').value;
+            const registrationNumber = document.getElementById('editRegistrationNumber').value;
+            personalDescription = document.getElementById('personalDescription').value;
+
+            if (fullName && phoneNumber.length === 10 && registrationNumber.length === 10) {
+                // Previous save logic remains the same
+                // Update SKILLS_DATA with user's skills
+                userSkills.forEach(skill => {
+                    if (!SKILLS_DATA[skill.category].all.some(s => s.name === fullName)) {
+                        SKILLS_DATA[skill.category].all.push({
+                            name: fullName,
+                            skill: skill.skill,
+                            fee: skill.fee,
+                            phone: phoneNumber,
+                            rating: 4.0
+                        });
+                    }
+                }); 
+                // Additional logic to save description and achievements
+                alert('Profile saved successfully!\n\n' + 
+                      'Description: ' + personalDescription + 
+                      '\n\nAchievements: ' + userAchievements.length);
+
+                // Update registration page details
+                document.getElementById('fullName').value = fullName;
+                document.getElementById('phoneNumber').value = phoneNumber;
+                document.getElementById('registrationNumber').value = registrationNumber;
+                // Return to home page
+                document.getElementById('profileEditPage').classList.add('hidden');
                 document.getElementById('homePage').classList.remove('hidden');
             } else {
                 alert('Please fill all fields correctly');
             }
         }
-
+        
+        function cancelEdit() {
+            document.getElementById('profileEditPage').classList.add('hidden');
+            document.getElementById('homePage').classList.remove('hidden');
+        }
+        
+        // Category and Skills Page Functions
         document.querySelector('.categories').addEventListener('click', function(event) {
             const categoryEl = event.target.closest('.category');
             if (categoryEl) {
@@ -239,7 +527,7 @@
                 openSkillCategory(category);
             }
         });
-
+        
         function openSkillCategory(category) {
             const categoryTitle = document.getElementById('categoryTitle');
             const featuredSkillsList = document.getElementById('featuredSkillsList');
@@ -248,7 +536,7 @@
             categoryTitle.textContent = category;
             
             const categoryData = SKILLS_DATA[category];
-
+        
             featuredSkillsList.innerHTML = categoryData.featured.map(skill => `
                 <div class="skill-item">
                     <div>
@@ -257,11 +545,11 @@
                         <br>Rating: ★ ${skill.rating}/5
                     </div>
                     <div>
-                        <button onclick="contactSkillProvider('${skill.name}', '${skill.phone}')">Contact</button>
+                        <button onclick="openBookingProfile('${skill.name}', '${skill.skill}', '${skill.fee}', '${skill.phone}')">Book</button>
                     </div>
                 </div>
             `).join('');
-
+        
             allSkillsList.innerHTML = categoryData.all.map(skill => `
                 <div class="skill-item">
                     <div>
@@ -270,22 +558,117 @@
                         <br>Rating: ★ ${skill.rating}/5
                     </div>
                     <div>
-                        <button onclick="contactSkillProvider('${skill.name}', '${skill.phone}')">Contact</button>
+                        <button onclick="openBookingProfile('${skill.name}', '${skill.skill}', '${skill.fee}', '${skill.phone}')">Book</button>
                     </div>
                 </div>
             `).join('');
-
+        
             document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('skillsPage').classList.remove('hidden');
+        }
+
+        function openBookingProfile(name, skill, fee, phone) {
+            const profilePage = document.getElementById('bookingProfilePage');
+            const profileName = document.getElementById('profileName');
+            const profileSkill = document.getElementById('profileSkill');
+            const profileFee = document.getElementById('profileFee');
+            const profileSkillsList = document.getElementById('profileSkillsList');
+            const profileAchievementsList = document.getElementById('profileAchievementsList');
+            const profileDescription = document.getElementById('profileDescription');
+
+            // Set basic profile information
+            profileName.textContent = name;
+            profileSkill.textContent = skill;
+            profileFee.textContent = `Fee: ${fee}`;
+
+            // Find user skills
+            const userMatchedSkills = userSkills.filter(s => s.skill === skill);
+            profileSkillsList.innerHTML = userMatchedSkills.map(s => `
+                <div>
+                    <strong>${s.skill}</strong> in ${s.category}
+                    <br>Fee: ${s.fee}
+                    <br>Initial Rating: ★ 4.0/5
+                </div>
+            `).join('');
+
+            // Display achievements
+            profileAchievementsList.innerHTML = userAchievements.map(a => `
+                <div>
+                    <strong>${a.title}</strong>
+                    <br>Year: ${a.year}
+                </div>
+            `).join('');
+
+            // Set personal description
+            profileDescription.innerHTML = `
+                <div class="profile-skills" style="margin-top: 15px;">
+                    <h2>About Me</h2>
+                    <p>${personalDescription || 'No description available'}</p>
+                    <p>Contact: ${phone}</p>
+                </div>
+            `;
+
+            // Hide skills page and show booking profile
+            document.getElementById('skillsPage').classList.add('hidden');
+            profilePage.classList.remove('hidden');
+        }
+        
+        function goBackToSkills() {
+            document.getElementById('bookingProfilePage').classList.add('hidden');
             document.getElementById('skillsPage').classList.remove('hidden');
         }
 
         function contactSkillProvider(name, phone) {
             alert(`Contact ${name} at ${phone}`);
         }
-
+        
         function goBack() {
             document.getElementById('skillsPage').classList.add('hidden');
             document.getElementById('homePage').classList.remove('hidden');
+        }
+
+        let userAchievements = [];
+        let personalDescription = '';
+
+        function addAchievement() {
+            const achievementTitle = document.getElementById('achievementTitle').value;
+            const achievementYear = document.getElementById('achievementYear').value;
+
+            if (achievementTitle && achievementYear) {
+                const newAchievement = {
+                    title: achievementTitle,
+                    year: achievementYear
+                };
+
+                userAchievements.push(newAchievement);
+                updateAchievementsList();
+
+                // Clear input fields
+                document.getElementById('achievementTitle').value = '';
+                document.getElementById('achievementYear').value = '';
+            } else {
+                alert('Please fill all achievement details');
+            }
+        }
+
+        function updateAchievementsList() {
+            const achievementsList = document.getElementById('achievementsList');
+            achievementsList.innerHTML = userAchievements.map((achievement, index) => `
+                <div class="skill-item">
+                    <div>
+                        <strong>${achievement.title}</strong>
+                        <br>Year: ${achievement.year}
+                    </div>
+                    <div>
+                        <button class="remove-skill-btn" onclick="removeAchievement(${index})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function removeAchievement(index) {
+            userAchievements.splice(index, 1);
+            updateAchievementsList();
         }
     </script>
 </body>
