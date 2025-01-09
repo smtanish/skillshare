@@ -204,33 +204,31 @@
     </div>
 
     <script>
-        class ProfileManager {
-            constructor() {
-                this.STORAGE_KEY = 'skillSwapProfiles';
-            }
+        // In-memory storage solution
+        const MemoryStorage = {
+            profiles: {},
+            currentUser: null,
 
             getProfiles() {
-                const profiles = localStorage.getItem(this.STORAGE_KEY);
-                return profiles ? JSON.parse(profiles) : {};
-            }
-
-            saveProfiles(profiles) {
-                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(profiles));
-            }
-
-            getProfile(registrationNumber) {
-                const profiles = this.getProfiles();
-                return profiles[registrationNumber] || null;
-            }
+                return this.profiles;
+            },
 
             saveProfile(profileData) {
-                const profiles = this.getProfiles();
-                profiles[profileData.registrationNumber] = profileData;
-                this.saveProfiles(profiles);
-            }
-        }
+                this.profiles[profileData.registrationNumber] = profileData;
+            },
 
-        const profileManager = new ProfileManager();
+            getProfile(registrationNumber) {
+                return this.profiles[registrationNumber] || null;
+            },
+
+            setCurrentUser(registrationNumber) {
+                this.currentUser = registrationNumber;
+            },
+
+            getCurrentUser() {
+                return this.currentUser;
+            }
+        };
 
         function createProfile() {
             const fullName = document.getElementById('fullName').value.trim();
@@ -251,93 +249,28 @@
                 achievements: []
             };
 
-            profileManager.saveProfile(profile);
-            sessionStorage.setItem('currentUser', registrationNumber);
+            MemoryStorage.saveProfile(profile);
+            MemoryStorage.setCurrentUser(registrationNumber);
             
             document.getElementById('registrationPage').classList.add('hidden');
             document.getElementById('homePage').classList.remove('hidden');
         }
 
         function showEditProfile() {
-            const currentUser = sessionStorage.getItem('currentUser');
-            if (!currentUser) {
-                alert('Please log in first');
-                return;
-            }
-
-            const profile = profileManager.getProfile(currentUser);
+            const currentUser = MemoryStorage.getCurrentUser();
+            const profile = MemoryStorage.getProfile(currentUser);
+            
             if (profile) {
                 document.getElementById('editFullName').value = profile.fullName;
                 document.getElementById('editPhoneNumber').value = profile.phoneNumber;
-                document.getElementById('personalDescription').value = profile.description || '';
-
-                // Load existing skills
-                const mySkillsList = document.getElementById('mySkillsList');
-                mySkillsList.innerHTML = '';
-                profile.skills.forEach(skill => {
-                    const skillElement = document.createElement('div');
-                    skillElement.className = 'skill-item';
-                    skillElement.innerHTML = `
-                        <span>${skill.category} - ${skill.name} (${skill.fee})</span>
-                        <button class="remove-skill-btn" onclick="removeSkill('${skill.name}')">Remove</button>
-                    `;
-                    mySkillsList.appendChild(skillElement);
-                });
-
-                // Load existing achievements
-                const achievementsList = document.getElementById('achievementsList');
-                achievementsList.innerHTML = '';
-                profile.achievements.forEach(achievement => {
-                    const achievementElement = document.createElement('div');
-                    achievementElement.className = 'skill-item';
-                    achievementElement.innerHTML = `
-                        <span>${achievement.title} (${achievement.year})</span>
-                        <button class="remove-skill-btn" onclick="removeAchievement('${achievement.title}')">Remove</button>
-                    `;
-                    achievementsList.appendChild(achievementElement);
-                });
+                document.getElementById('personalDescription').value = profile.description;
+                
+                updateSkillsList();
+                updateAchievementsList();
+                
+                document.getElementById('homePage').classList.add('hidden');
+                document.getElementById('profileEditPage').classList.remove('hidden');
             }
-
-            document.getElementById('homePage').classList.add('hidden');
-            document.getElementById('profileEditPage').classList.remove('hidden');
-        }
-
-        function saveProfile() {
-            const currentUser = sessionStorage.getItem('currentUser');
-            if (!currentUser) {
-                alert('Please log in first');
-                return;
-            }
-
-            const profile = {
-                registrationNumber: currentUser,
-                fullName: document.getElementById('editFullName').value.trim(),
-                phoneNumber: document.getElementById('editPhoneNumber').value.trim(),
-                description: document.getElementById('personalDescription').value.trim(),
-                skills: Array.from(document.getElementById('mySkillsList').children).map(skillElement => {
-                    const skillText = skillElement.querySelector('span').textContent;
-                    const [category, rest] = skillText.split(' - ');
-                    const [name, fee] = rest.split(' (');
-                    return {
-                        category,
-                        name,
-                        fee: fee.slice(0, -1)
-                    };
-                }),
-                achievements: Array.from(document.getElementById('achievementsList').children).map(achievementElement => {
-                    const achievementText = achievementElement.querySelector('span').textContent;
-                    const [title, year] = achievementText.split(' (');
-                    return {
-                        title,
-                        year: year.slice(0, -1)
-                    };
-                })
-            };
-
-            profileManager.saveProfile(profile);
-            alert('Profile saved successfully!');
-            document.getElementById('profileEditPage').classList.add('hidden');
-            document.getElementById('homePage').classList.remove('hidden');
         }
 
         function addSkill() {
@@ -350,28 +283,14 @@
                 return;
             }
 
-            const skillElement = document.createElement('div');
-            skillElement.className = 'skill-item';
-            skillElement.innerHTML = `
-                <span>${category} - ${name} (${fee})</span>
-                <button class="remove-skill-btn" onclick="removeSkill('${name}')">Remove</button>
-            `;
-            document.getElementById('mySkillsList').appendChild(skillElement);
-
-            // Clear input fields
-            document.getElementById('skillName').value = '';
-            document.getElementById('skillFee').value = '';
-        }
-
-        function removeSkill(skillName) {
-            const skillsList = document.getElementById('mySkillsList');
-            const skillItems = skillsList.children;
-            for (let item of skillItems) {
-                if (item.querySelector('span').textContent.includes(skillName)) {
-                    item.remove();
-                    break;
-                }
-            }
+            const currentUser = MemoryStorage.getCurrentUser();
+            const profile = MemoryStorage.getProfile(currentUser);
+            
+            profile.skills.push({ category, name, fee });
+            MemoryStorage.saveProfile(profile);
+            
+            updateSkillsList();
+            clearSkillInputs();
         }
 
         function addAchievement() {
@@ -383,28 +302,89 @@
                 return;
             }
 
-            const achievementElement = document.createElement('div');
-            achievementElement.className = 'skill-item';
-            achievementElement.innerHTML = `
-                <span>${title} (${year})</span>
-                <button class="remove-skill-btn" onclick="removeAchievement('${title}')">Remove</button>
-            `;
-            document.getElementById('achievementsList').appendChild(achievementElement);
+            const currentUser = MemoryStorage.getCurrentUser();
+            const profile = MemoryStorage.getProfile(currentUser);
+            
+            profile.achievements.push({ title, year });
+            MemoryStorage.saveProfile(profile);
+            
+            updateAchievementsList();
+            clearAchievementInputs();
+        }
 
-            // Clear input fields
+        function updateSkillsList() {
+            const currentUser = MemoryStorage.getCurrentUser();
+            const profile = MemoryStorage.getProfile(currentUser);
+            const skillsList = document.getElementById('mySkillsList');
+            
+            skillsList.innerHTML = '';
+            profile.skills.forEach((skill, index) => {
+                const skillElement = document.createElement('div');
+                skillElement.className = 'skill-item';
+                skillElement.innerHTML = `
+                    <div>${skill.category} - ${skill.name} (${skill.fee})</div>
+                    <button class="remove-skill-btn" onclick="removeSkill(${index})">Remove</button>
+                `;
+                skillsList.appendChild(skillElement);
+            });
+        }
+
+        function updateAchievementsList() {
+            const currentUser = MemoryStorage.getCurrentUser();
+            const profile = MemoryStorage.getProfile(currentUser);
+            const achievementsList = document.getElementById('achievementsList');
+            
+            achievementsList.innerHTML = '';
+            profile.achievements.forEach((achievement, index) => {
+                const achievementElement = document.createElement('div');
+                achievementElement.className = 'skill-item';
+                achievementElement.innerHTML = `
+                    <div>${achievement.title} (${achievement.year})</div>
+                    <button class="remove-skill-btn" onclick="removeAchievement(${index})">Remove</button>
+                `;
+                achievementsList.appendChild(achievementElement);
+            });
+        }
+
+        function removeSkill(index) {
+            const currentUser = MemoryStorage.getCurrentUser();
+            const profile = MemoryStorage.getProfile(currentUser);
+            profile.skills.splice(index, 1);
+            MemoryStorage.saveProfile(profile);
+            updateSkillsList();
+        }
+
+        function removeAchievement(index) {
+            const currentUser = MemoryStorage.getCurrentUser();
+            const profile = MemoryStorage.getProfile(currentUser);
+            profile.achievements.splice(index, 1);
+            MemoryStorage.saveProfile(profile);
+            updateAchievementsList();
+        }
+
+        function clearSkillInputs() {
+            document.getElementById('skillCategory').value = '';
+            document.getElementById('skillName').value = '';
+            document.getElementById('skillFee').value = '';
+        }
+
+        function clearAchievementInputs() {
             document.getElementById('achievementTitle').value = '';
             document.getElementById('achievementYear').value = '';
         }
 
-        function removeAchievement(achievementTitle) {
-            const achievementsList = document.getElementById('achievementsList');
-            const achievementItems = achievementsList.children;
-            for (let item of achievementItems) {
-                if (item.querySelector('span').textContent.includes(achievementTitle)) {
-                    item.remove();
-                    break;
-                }
-            }
+        function saveProfile() {
+            const currentUser = MemoryStorage.getCurrentUser();
+            const profile = MemoryStorage.getProfile(currentUser);
+            
+            profile.fullName = document.getElementById('editFullName').value.trim();
+            profile.phoneNumber = document.getElementById('editPhoneNumber').value.trim();
+            profile.description = document.getElementById('personalDescription').value.trim();
+            
+            MemoryStorage.saveProfile(profile);
+            
+            document.getElementById('profileEditPage').classList.add('hidden');
+            document.getElementById('homePage').classList.remove('hidden');
         }
 
         function showSkills(category) {
@@ -412,7 +392,7 @@
             skillsList.innerHTML = '';
             document.getElementById('categoryTitle').textContent = category;
 
-            const profiles = profileManager.getProfiles();
+            const profiles = MemoryStorage.getProfiles();
             Object.values(profiles).forEach(profile => {
                 profile.skills.forEach(skill => {
                     if (skill.category === category) {
@@ -423,4 +403,33 @@
                                 <strong>${profile.fullName}</strong><br>
                                 ${skill.name} (${skill.fee})
                             </div>
-                            <button onclick="showProfile('${profile.registrationNumber
+                            <button onclick="contactUser('${profile.registrationNumber}')">Contact</button>
+                        `;
+                        skillsList.appendChild(skillElement);
+                    }
+                });
+            });
+
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('skillsPage').classList.remove('hidden');
+        }
+
+        function contactUser(registrationNumber) {
+            const profile = MemoryStorage.getProfile(registrationNumber);
+            if (profile) {
+                alert(`Contact ${profile.fullName} at ${profile.phoneNumber}`);
+            }
+        }
+
+        function goBack() {
+            document.getElementById('skillsPage').classList.add('hidden');
+            document.getElementById('homePage').classList.remove('hidden');
+        }
+
+        function cancelEdit() {
+            document.getElementById('profileEditPage').classList.add('hidden');
+            document.getElementById('homePage').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
